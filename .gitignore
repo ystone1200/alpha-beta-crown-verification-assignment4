@@ -1,0 +1,9 @@
+assignment3/
+assignment4.pdf
+
+alpha-beta-CROWN/
+.venv/
+__pycache__/
+*.pyc
+
+.env

@@ -1,0 +1,22 @@
+# Python 3.11 is required for alpha-beta-CROWN.
+# Install the verifier with the README commands:
+#   git clone --recursive https://github.com/Verified-Intelligence/alpha-beta-CROWN.git
+#   cd alpha-beta-CROWN
+#   uv sync --python 3.11
+#
+# Major packages installed by alpha-beta-CROWN's uv environment:
+torch==2.11.0
+torchvision>=0.21.0
+numpy>=2.0.0
+pyyaml>=6.0.3
+onnx>=1.20.1
+onnxruntime>=1.24.1
+onnxoptimizer>=0.4.2
+onnxscript>=0.7.0
+onnxsim>=0.4.36
+gurobipy<13.0.0
+pandas>=3.0.0
+scikit-learn>=1.9.0
+sortedcontainers>=2.4.0
+termcolor>=3.3.0
+tqdm>=4.67.3

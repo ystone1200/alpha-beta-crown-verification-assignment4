@@ -69,6 +69,13 @@ def read_status(status_file: Path, stdout: str) -> tuple[str, str]:
     return raw_status, normalize_status(raw_status)
 
 
+def read_reported_time(stdout: str) -> float | None:
+    matches = re.findall(r"^Time:\s*([0-9.eE+-]+)", stdout, flags=re.MULTILINE)
+    if not matches:
+        return None
+    return float(matches[-1])
+
+
 def load_cases(path: Path) -> dict[str, Any]:
     if not path.exists():
         raise SystemExit(
@@ -139,9 +146,10 @@ def run_case(
     return {
         "status": status,
         "raw_status": raw_status,
-        "runtime_seconds": elapsed,
+        "wrapper_runtime_seconds": elapsed,
+        "abcrown_reported_time_seconds": read_reported_time(completed.stdout),
         "returncode": completed.returncode,
-        "stdout_tail": completed.stdout.splitlines()[-30:],
+        "stdout_tail": completed.stdout.splitlines()[-16:],
     }
 
 
@@ -210,7 +218,8 @@ def main() -> None:
             sample_output["epsilon_results"].append(row)
             print(
                 f"  eps={epsilon:g}: alpha-beta-CROWN={abcrown_result['status']} "
-                f"({abcrown_result['raw_status']}, {abcrown_result['runtime_seconds']:.2f}s), "
+                f"({abcrown_result['raw_status']}, "
+                f"{abcrown_result['wrapper_runtime_seconds']:.2f}s wall), "
                 f"Marabou={marabou_result['status']}"
             )
         results["samples"].append(sample_output)

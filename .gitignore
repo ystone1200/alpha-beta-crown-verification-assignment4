@@ -5,5 +5,7 @@ alpha-beta-CROWN/
 .venv/
 __pycache__/
 *.pyc
+*.vnnlib.compiled
+results/abcrown_status/
 
 .env

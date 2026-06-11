@@ -1,0 +1,25 @@
+general:
+  device: cpu
+  seed: 7
+  complete_verifier: bab
+  enable_incomplete_verification: true
+  results_file: ../../results/alpha_beta_crown_status.txt
+
+model:
+  onnx_path: ../../models/wine_mlp.onnx
+  input_shape: [-1, 13]
+
+data:
+  num_outputs: 3
+
+specification:
+  vnnlib_path: ../../specs/wine/low_margin_3_eps_0_100.vnnlib
+
+solver:
+  batch_size: 64
+
+bab:
+  timeout: 30
+
+attack:
+  pgd_order: before

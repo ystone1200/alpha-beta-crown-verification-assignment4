@@ -4,19 +4,30 @@
 #   cd alpha-beta-CROWN
 #   uv sync --python 3.11
 #
-# Major packages installed by alpha-beta-CROWN's uv environment:
+# Major packages installed by alpha-beta-CROWN's uv environment.
+# The README still recommends `uv sync` inside alpha-beta-CROWN as the primary
+# verifier setup path; this file records the important Python dependencies for
+# reproducibility.
 torch==2.11.0
 torchvision>=0.21.0
 numpy>=2.0.0
 pyyaml>=6.0.3
+graphviz>=0.21
+appdirs>=1.4.4
+setuptools
 onnx>=1.20.1
+onnx2pytorch @ git+https://github.com/Verified-Intelligence/onnx2pytorch@0826948e0d50cd09d909b7f26b2ee9ca2d3d71b3
 onnxruntime>=1.24.1
 onnxoptimizer>=0.4.2
 onnxscript>=0.7.0
 onnxsim>=0.4.36
 gurobipy<13.0.0
 pandas>=3.0.0
+pillow>=12.1.1
+psutil>=7.2.2
 scikit-learn>=1.9.0
+skl2onnx>=1.20.0
 sortedcontainers>=2.4.0
+sympy>=1.14.0
 termcolor>=3.3.0
 tqdm>=4.67.3

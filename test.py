@@ -19,7 +19,6 @@ STATUS_MAP = {
     "sat": "falsified",
     "unsafe": "falsified",
     "timeout": "timeout",
-    "unknown": "timeout",
 }
 
 
@@ -42,13 +41,19 @@ def epsilon_token(epsilon: float) -> str:
 
 
 def find_python(abcrown_dir: Path) -> Path:
-    candidate = abcrown_dir / ".venv" / "Scripts" / "python.exe"
-    if not candidate.exists():
-        raise SystemExit(
-            f"Missing {candidate}. Install alpha-beta-CROWN first, e.g. "
-            "`cd alpha-beta-CROWN && uv sync --python 3.11`."
-        )
-    return candidate
+    candidates = [
+        abcrown_dir / ".venv" / "Scripts" / "python.exe",
+        abcrown_dir / ".venv" / "bin" / "python",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    checked = ", ".join(str(path) for path in candidates)
+    raise SystemExit(
+        f"Missing alpha-beta-CROWN Python interpreter. Checked: {checked}. "
+        "Install alpha-beta-CROWN first, e.g. "
+        "`cd alpha-beta-CROWN && uv sync --python 3.11`."
+    )
 
 
 def normalize_status(raw_status: str) -> str:
@@ -59,10 +64,18 @@ def normalize_status(raw_status: str) -> str:
     return "unknown"
 
 
+def finalize_status(raw_status: str, returncode: int) -> str:
+    status = normalize_status(raw_status)
+    if status == "unknown" and returncode != 0:
+        return "error"
+    return status
+
+
 def read_status(status_file: Path, stdout: str) -> tuple[str, str]:
     raw_status = ""
     if status_file.exists():
-        raw_status = status_file.read_text(encoding="utf-8").strip().splitlines()[-1]
+        status_lines = status_file.read_text(encoding="utf-8").strip().splitlines()
+        raw_status = status_lines[-1] if status_lines else ""
     if not raw_status:
         match = re.findall(r"Result:\s*([A-Za-z0-9_-]+)", stdout)
         raw_status = match[-1] if match else "unknown"
@@ -141,7 +154,8 @@ def run_case(
         check=False,
     )
     elapsed = time.perf_counter() - start
-    raw_status, status = read_status(status_file, completed.stdout)
+    raw_status, _ = read_status(status_file, completed.stdout)
+    status = finalize_status(raw_status, completed.returncode)
 
     return {
         "status": status,

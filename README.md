@@ -39,7 +39,9 @@ cd ..
 `auto_LiRPA` submodule import 경로 문제가 있어, `test.py`에서
 `alpha-beta-CROWN/auto_LiRPA`를 `PYTHONPATH` 앞에 추가한 뒤 verifier를 실행한다.
 
-보조 패키지는 다음과 같이 설치한다.
+Python 의존성 목록은 `requirements.txt`에 정리하였다. 다만 verifier 본체는
+alpha-beta-CROWN 저장소 안에서 `uv sync --python 3.11`로 설치하는 방식을
+기준으로 한다.
 
 ```bash
 pip install -r requirements.txt
@@ -97,6 +99,7 @@ and some non-original class logit >= the original predicted class logit
 - `unsat`: unsafe condition에 도달할 수 없으므로 해당 epsilon에서 verified.
 - `sat`: 반례가 존재하므로 해당 epsilon에서 falsified.
 - `timeout`: 제한 시간 안에 결론에 도달하지 못함.
+- `error`: verifier 실행 실패 등으로 결과를 정상 해석할 수 없음.
 
 ## 실험 결과 요약
 
